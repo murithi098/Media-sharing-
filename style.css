@@ -35,3 +35,6 @@ video, canvas {
     width: 150px;
     margin: 5px;
 }
+* {
+    margin: 0;
+    padding: 0;
