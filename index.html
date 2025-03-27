@@ -3,21 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Media Sharing</title>
+    <title>Camera App</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>📸 Media Sharing</h1>
 
-    <div class="buttons">
-        <button id="openCamera">Open Camera</button>
-        <input type="file" id="fileInput" accept="image/*,video/*" multiple>
+    <div class="camera-container">
+        <video id="cameraView" autoplay playsinline></video>
+        <canvas id="captureCanvas"></canvas>
+        
+        <div class="controls">
+            <button id="flipCamera">🔄</button>
+            <button id="flashToggle">⚡</button>
+        </div>
+
+        <div class="bottom-bar">
+            <button id="capture"></button>
+        </div>
     </div>
-
-    <video id="cameraView" autoplay playsinline></video>
-    <canvas id="captureCanvas"></canvas>
-    
-    <div id="gallery"></div>
 
     <script src="script.js"></script>
 </body>
