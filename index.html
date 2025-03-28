@@ -3,25 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Camera App</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Media Sharing</title>
+    <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-storage.js"></script>
+    <script>
+        // 🔹 Paste your Firebase config here
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "your-app.firebaseapp.com",
+            projectId: "your-app",
+            storageBucket: "your-app.appspot.com",
+            messagingSenderId: "SENDER_ID",
+            appId: "APP_ID"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const storage = firebase.storage();
+
+        function uploadFile() {
+            const file = document.getElementById("fileInput").files[0];
+            if (!file) return alert("No file selected!");
+
+            const storageRef = storage.ref("uploads/" + file.name);
+            const uploadTask = storageRef.put(file);
+
+            uploadTask.on("state_changed",
+                snapshot => {
+                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    document.getElementById("progress").innerText = `Upload Progress: ${progress.toFixed(2)}%`;
+                },
+                error => alert("Upload failed: " + error.message),
+                () => {
+                    uploadTask.snapshot.ref.getDownloadURL().then(url => {
+                        document.getElementById("gallery").innerHTML += `<a href="${url}" target="_blank">${file.name}</a><br>`;
+                    });
+                }
+            );
+        }
+    </script>
 </head>
 <body>
-
-    <div class="camera-container">
-        <video id="cameraView" autoplay playsinline></video>
-        <canvas id="captureCanvas"></canvas>
-        
-        <div class="controls">
-            <button id="flipCamera">🔄</button>
-            <button id="flashToggle">⚡</button>
-        </div>
-
-        <div class="bottom-bar">
-            <button id="capture"></button>
-        </div>
-    </div>
-
-    <script src="script.js"></script>
+    <h1>Upload & Share Media</h1>
+    <input type="file" id="fileInput">
+    <button onclick="uploadFile()">Upload</button>
+    <p id="progress"></p>
+    <h2>Gallery</h2>
+    <div id="gallery"></div>
 </body>
 </html>
